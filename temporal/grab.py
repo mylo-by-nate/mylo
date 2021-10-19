@@ -11,6 +11,8 @@ def requestMemory(type, context, returnMem=False):
     path friends daigen or self howmade
     check'''
     if type == "longterm":
+        if context['type'] == 'weather':
+            return weather.memories[context['path']]
         if context['type'] == 'brain' and returnMem:
             if context['path'] == 'nate':
                 return nate.memories
@@ -55,14 +57,6 @@ def requestMemory(type, context, returnMem=False):
                         return True                
                 else:
                     return False
-            if context['path'][0] == 'weather':
-                if context['check'] in weather.memories:
-                    if returnMem:
-                        return weather.memories[context['path'][1]]
-                    else:
-                        return True                
-                else:
-                    return False
         elif context['type'] == 'cell':
             if context['path'][0] == 'friends':
                 if context['check'] in friends.memories[context['path'][1]]:
@@ -95,15 +89,7 @@ def requestMemory(type, context, returnMem=False):
                     else:
                         return True                
                 else:
-                    return False
-            if context['path'][0] == 'weather':
-                if context['check'] in weather.memories[context['path'][1]]:
-                    if returnMem:
-                        return weather.memories[context['path'][1]][context['path'][2]]
-                    else:
-                        return True                 
-                else:
-                    return False           
+                    return False       
         elif 'neuron' in context['type'] and 'exist' in context['type']:
             if context['path'][0] == 'friends':
                 if context['check'] in friends.memories[context['path'][1]][context['path'][2]]:
@@ -124,12 +110,7 @@ def requestMemory(type, context, returnMem=False):
                 if context['check'] in self.memories[context['path'][1]][context['path'][2]]:
                     return True
                 else:
-                    return False
-            if context['path'][0] == 'weather':
-                if context['check'] in weather.memories[context['path'][1]][context['path'][2]]:
-                    return True
-                else:
-                    return False             
+                    return False        
         elif 'neuron' in context['type'] and 'value' in context['type']:
             if context['path'][0] == 'friends':
                 if context['check'] in friends.memories[context['path'][1]][context['path'][2]]:
@@ -150,12 +131,7 @@ def requestMemory(type, context, returnMem=False):
                 if context['check'] in self.memories[context['path'][1]][context['path'][2]]:
                     return self.memories[context['path'][1]][context['path'][2]][context['path'][3]]
                 else:
-                    return False
-            if context['path'][0] == 'weather':
-                if context['check'] in weather.memories[context['path'][1]][context['path'][2]]:
-                    return weather.memories[context['path'][1]][context['path'][2]][context['path'][3]]
-                else:
-                    return False             
+                    return False           
     elif type == "shortterm":
         if context in shortterm.memories:
             if returnMem:
