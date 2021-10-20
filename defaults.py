@@ -17,7 +17,17 @@ nate = { #MB
                 'fire': None,
                 'phrase': None
             },
+        },
+        "favorites":{
+            "templatephrase":["nate's favorite NAME is ANSWER.", "i have nate's favorite NAME saved as ANSWER.", "i remember nate's favorite NAME being ANSWER."],
+            "templatekeys":["what is nates favorite NAME", "does nate like ANSWER", "is nates favorite NAME ANSWER", "do you remember nates favorite NAME"],
             
+            "birthday": { #NEURON
+                'addkeys': ['what is nates birthday', 'when is nates birthday'],
+                'ans': 'August 16th, 2001',
+                'fire': None,
+                'phrase': None
+            },            
         }
     }
 }
