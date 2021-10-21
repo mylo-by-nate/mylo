@@ -145,7 +145,7 @@ def howFunction(keywords, literal, profile):
         return True
     query['func'] = sendQuery
     activequeries.add(query, profile['info']['name'])
-    callosum.lastProcessed = {"phrase":phrase, "type":"query"}
+    callosum.lastProcessed = {"phrase":phrase, "type":"query", "keys": query['keys'], 'querytype': query['type']}
     return True
 
 
