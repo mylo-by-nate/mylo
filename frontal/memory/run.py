@@ -65,15 +65,6 @@ class Query(object):
                         return True
         return False
 
-def timeFunction(keywords, literal, profile):
-    now = datetime.datetime.now()
-    phrase = functions.decision([f"The current time is {now.strftime('%I:%M %p')}.",
-                             f"It's currently {now.strftime('%I:%M %p')}.",
-                             f"The time now is {now.strftime('%I:%M %p')}",
-                             now.strftime('%I:%M %p'),
-                             f"It is currently {now.strftime('%I:%M %p')}"])
-    callosum.lastProcessed = {"phrase":phrase, "type":"basic"}
-    return True
 
 def process(literal, profile, override=False):
     keyword = literal.lower()
@@ -86,23 +77,27 @@ def process(literal, profile, override=False):
         for fold in chunk:
             for cell in chunk[fold]:
                 for neuron in chunk[fold][cell]:
-                    for key in chunk[fold][neuron]['keys']:
+                    for key in chunk[fold][cell][neuron]['fire']:
                         for kword in key:
                             points = 0
                             for word in keyword:
-                                if chunk[fold][neuron]['require'] is not None and word in chunk[fold][neuron]['require']:
+                                if 'require' not in chunk[fold][cell][neuron]:
+                                    chunk[fold][cell][neuron]['require'] = None
+                                if 'whitelist' not in chunk[fold][cell][neuron]:
+                                    chunk[fold][cell][neuron]['whitelist'] = None
+                                if chunk[fold][cell][neuron]['require'] is not None and word in chunk[fold][cell][neuron]['require']:
                                     points += 1.5
                                     truePass = True
-                                if chunk[fold][neuron]['whitelist'] is not None and word in chunk[fold][neuron]['whitelist']:
+                                if chunk[fold][cell][neuron]['whitelist'] is not None and word in chunk[fold][cell][neuron]['whitelist']:
                                     points -= 5
                                     truePass = False
                                 if word in kword:
                                     points += 1
                             print(str(points) + " " + str(kword))
                             if (points > (len(keyword) * .74) or points > (len(kword) * .74)) or (override and points > (len(keyword) * 0.5)):
-                                if truePass and chunk[fold][neuron]['require'] is not None:
-                                    neuron['fire'](self, keyword,literal,profile)
+                                if truePass and chunk[fold][cell][neuron]['require'] is not None:
+                                    callosum.lastProcessed = functions.decision(chunk[fold][cell][neuron]['phrases'])
                                     return True
-                                elif not truePass and chunk[fold][neuron]['require'] is None:
-                                    neuron['fire'](self, keyword,literal,profile)
+                                elif not truePass and chunk[fold][cell][neuron]['require'] is None:
+                                    callosum.lastProcessed = functions.decision(chunk[fold][cell][neuron]['phrases'])
                                     return True
